@@ -82,11 +82,11 @@ def get_candidate_name(_candidate_index: uint256) ->String[25]:
 
 @external
 def vote_for_candidate( _voter:address,_candidate_index: uint256):
-    # assert self.voters[_voter].voting_status = True
+    assert self.voters[_voter].voting_status 
     assert self.num_candidates > _candidate_index
 
     self.voters[_voter].voted_candidate_index = _candidate_index
-    self.voters[_voter].voting_status = True
+    self.voters[_voter].voting_status = False
     self.candidates[_candidate_index].candidate_voteCount +=1
     log VotedForCandidate(msg.sender,_candidate_index,block.timestamp)
 
@@ -105,13 +105,13 @@ def get_results() -> uint256[2]:
 @view
 @external
 def get_vote_results(_voter:address) -> uint256[2]:
-    assert self.voters[_voter].voting_status 
+    assert not self.voters[_voter].voting_status 
     return self.get_results()
 
 @view
 @external
 def get_leading_candidate_name(_voter:address, _index:uint256) -> String[25]:
-    assert self.voters[_voter].voting_status
+    assert not self.voters[_voter].voting_status
     return self.candidates[_index].candidate_name
 
 
