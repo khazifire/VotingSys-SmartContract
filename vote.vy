@@ -1,6 +1,6 @@
 struct Voter:
-    voter_firstName: bytes32
-    voter_lastName: bytes32
+    voter_firstName: String[25]
+    voter_lastName: String[25]
     voter_age:uint256
     voting_status: bool
 
@@ -45,7 +45,7 @@ def exists_account(_address:address) -> bool:
     return False
 
 @external
-def register_voter_account(_voter_account:address, _voter_firstName:bytes32, _voter_lastName:bytes32,_voter_age:uint256):
+def register_voter_account(_voter_account:address, _voter_firstName:String[25], _voter_lastName:String[25],_voter_age:uint256):
     assert msg.sender == self.contract_owner
     assert not self.exists_account(_voter_account)
     self.voters[_voter_account] = Voter({
@@ -116,7 +116,7 @@ def get_leading_candidate_name(_voter:address, _index:uint256) -> String[25]:
 
 @view
 @external
-def get_result_sum(_voter:address,_index:uint256) ->uint256:
+def get_result_sum(_voter:address,_index:uint256) -> uint256:
     assert not self.voters[_voter].voting_status
     return self.candidates[_index].candidate_voteCount
 

@@ -22,7 +22,7 @@ w3 = Web3(HTTPProvider('http://localhost:7545'))
 
 contractInfo = {'contract_address':'','account_address' :'','account_private_key':''}
 
-w3.eth.default_account = contractInfo['account_address'] 
+
 
 votingsystem = w3.eth.contract(address=contractInfo['contract_address'], abi=abi)
 
@@ -81,14 +81,10 @@ def set_contract_account():
         error_msg("The address you entered is not in the correct format")
 
 
-def get_name_candidate():
-    option_title("Getting candidate name from index")
-    try:
-        candidate_index = int(input("Candidate Number (index #): "))
-        candidate_name = votingsystem.functions.get_candidate_name(candidate_index).call()
-        print(f"{candidate_name}")
-    except:
-        error_msg("candidate name could not be retrived, please enter the correct index")
+def get_name_candidate(candidate_index):
+    candidate_name = votingsystem.functions.get_candidate_name(candidate_index).call()
+    return candidate_name
+  
 
 
 def vote_candidate():
@@ -98,42 +94,41 @@ def vote_candidate():
     for x in range(0,3):
         print(f"{x}. {get_name_candidate(x)}")
     print("To vote simply enter the number of the candidate")
-    try:
-        candidate_index = int(input("Candidate Number: "))
-        transaction = votingsystem.functions.vote_for_candidate(contractInfo["account_address"],candidate_index).buildTransaction({
-            'gas': 1000,
-            'gasPrice': w3.toWei('1', 'gwei'),
-            'nonce': w3.eth.getTransactionCount(w3.eth.defaultAccount)
-        })
-        sign_transaction(transaction)
-        success_msg(f"you successfully votes for {get_name_candidate(candidate_index)}")
-    except:
-        error_msg("voting failed, please try again and make sure to enter the correct number")
+   
+    candidate_index = int(input("Candidate Number: "))
+    transaction = votingsystem.functions.vote_for_candidate(contractInfo["account_address"],candidate_index).buildTransaction({
+        'gas': 100000,
+        'gasPrice': w3.toWei('1', 'gwei'),
+        'nonce': w3.eth.getTransactionCount(w3.eth.defaultAccount)
+    })
+    sign_transaction(transaction)
+    success_msg(f"you successfully votes for {get_name_candidate(candidate_index)}")
+
 
 def get_vote_sum():
-    clear_console()
-    option_title("Getting vote result sumaary")
-    try:
-        for x in range(0,3):
-            candidate_name = votingsystem.functions.get_candidate_name(x).call()
-            candidate_votes= votingsystem.functions.get_result_sum(contractInfo["account_address"],x)
-            print(f"candidate name: {candidate_name} : number of votes {candidate_votes}")
-    except:
-        error_msg("candidate name could not be retrived, please enter the correct index")
+    for x in range(0,3):
+        candidate_name = votingsystem.functions.get_candidate_name(x).call()
+        candidate_votes= votingsystem.functions.get_result_sum(contractInfo["account_address"],x).call()
+        print(f"candidate name: {candidate_name} : number of votes {candidate_votes}")
+
 
 def get_winner():
-    clear_console() 
-    option_title("Leading candidate")
-    try:
-        vote_result= votingsystem.functions.get_vote_results(contractInfo["account_address"])
-        success_msg(f"Current leading candidate is {vote_result[0]} with {vote_result[1]} votes")
-    except:
-        error_msg("candidate name could not be retrived, please enter the correct index")   
+    vote_result= votingsystem.functions.get_vote_results(contractInfo["account_address"]).call()
+    name = votingsystem.functions.get_leading_candidate_name(contractInfo["account_address"], vote_result[0]).call()
+    success_msg(f"Current leading candidate is {name} with {vote_result[1]} votes")
+    
+   
 
 
 def sign_transaction(transaction):
     signed = w3.eth.account.signTransaction(transaction, private_key=contractInfo["account_private_key"])
     w3.eth.sendRawTransaction(signed.rawTransaction)
+
+
+# set_default_account()
+# set_contract_account()
+# w3.eth.default_account = contractInfo['account_address'] 
+# votingsystem = w3.eth.contract(address=contractInfo['contract_address'], abi=abi)
 
 
 def nav_menu(option):

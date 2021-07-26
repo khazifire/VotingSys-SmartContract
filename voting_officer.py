@@ -81,24 +81,23 @@ def set_contract_account():
         error_msg("The address you entered is not in the correct format")
 
 def register_voter_acc():
-    clear_console()
-    option_title("Registring Student Account")
-  
-    voter_address = '0x2A39E5dD730010dA3a9185f6437d139e18B01Bcd'
-    voter_fname = 'dan'
-    voter_lname = 'kazim'
-    print("gas balnce: ", w3.eth.getBalance(contractInfo["account_address"]))
-    birtYear = 2002
-    year_now = datetime.datetime.now().year
-    voter_age = year_now - birtYear
+    voter_address = Web3.toChecksumAddress(str(input("What is the address of the citizen: ")).strip())
+    voter_fname = str(input("Voter FirstName: ")).strip()
+    voter_lname = str(input("Voter LastName: ")).strip()
+    voter_age = int(input("How old are you: "))
 
     transaction = votingsystem.functions.register_voter_account(voter_address,voter_fname,voter_lname, voter_age).buildTransaction({
-        'gas': 1000000,
-        'gasPrice': w3.toWei('1', 'gwei'),
+        'from': contractInfo['account_address'],
+        'gas': 3000000,
+        'gasPrice': w3.toWei('40', 'gwei'),
         'nonce': w3.eth.getTransactionCount(w3.eth.defaultAccount)
     })
+    print(contractInfo['account_private_key'])
     signed = w3.eth.account.signTransaction(transaction, private_key=contractInfo["account_private_key"])
-    w3.eth.sendRawTransaction(signed.rawTransaction)
+
+    signed_txn = w3.eth.sendRawTransaction(signed.rawTransaction)
+
+    return w3.eth.waitForTransactionReceipt(signed_txn)
     
 # def register_voter_acc():
 #     clear_console()
