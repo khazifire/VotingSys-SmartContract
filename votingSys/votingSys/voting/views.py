@@ -303,15 +303,54 @@ abi = '''[
 
 w3 = Web3(HTTPProvider('http://localhost:7545'))
 
-contract_address = '0x0af609011749c8E1E65648119bD666D0Db5C89A8'
-               
-
+contract_address = '0x0af609011749c8E1E65648119bD666D0Db5C89A8'            
 votingsystem = w3.eth.contract(address=contract_address, abi=abi)
 
 
-
 class IndexView(generic.TemplateView):
-    template_name = 'votingContract/home.html'
+    template_name = 'voting/home.html'
+
+    def get(self, *args, **kwargs):
+        candidate_num = votingsystem.functions.num_candidates().call()
+        
+        candidate_names = []
+
+        for candidate in range(0,candidate_num):
+            publick = self.request.session['account_address']
+            names = str(votingsystem.functions.get_candidate_name(candidate).call())
+            candidate_votes= int(votingsystem.functions.get_result_sum(publick,candidate).call())
+
+            candidate_names.append(tuple([names,candidate_votes]))
+
+        context ={
+            'candidates':candidate_names,
+          
+        }
+        return render(self.request,self.template_name,context)
+
+
+class setDefaultAccount(generic.TemplateView):
+    template_name = 'voting/simpleLogin.html'
+    
+    def post(self, *args, **kwargs):
+        clearSession(self.request)
+        if self.request.is_ajax and self.request.method == "POST":
+            public_key = w3.toChecksumAddress(self.request.POST.get("public_key", None))
+            private_key = self.request.POST.get("private_key", None)
+
+            if (len(public_key)) and (len(private_key)):
+                self.request.session['account_address'] = public_key
+                self.request.session['account_private_key'] = private_key
+                w3.eth.default_account = public_key
+                messages.info(self.request, "Login completed!")
+                return redirect('voting:voteCandidate')
+            else:
+                messages.warning(self.request, "Login failed, please try again")
+                return JsonResponse({}, status = 400)
+
+
+class voteCandidate(generic.View):
+    template_name = 'voting/vote.html'
 
     def get(self, *args, **kwargs):
         candidate_num = votingsystem.functions.num_candidates().call()
@@ -325,100 +364,23 @@ class IndexView(generic.TemplateView):
         }
         return render(self.request,self.template_name,context)
 
-
-class setDefaultAccount(generic.TemplateView):
-    template_name = 'votingContract/simpleLogin.html'
-
-
-    def post(self, *args, **kwargs):
-        clearSession(self.request)
-        if self.request.is_ajax and self.request.method == "POST":
-            public_key = w3.toChecksumAddress(self.request.POST.get("public_key", None))
-            private_key = self.request.POST.get("private_key", None)
-
-            if (len(public_key)) and (len(private_key)):
-                self.request.session['account_address'] = public_key
-                self.request.session['account_private_key'] = private_key
-                w3.eth.default_account = public_key
-                messages.info(self.request, "Login completed!")
-                return redirect('votingContract:dashboard')
-            else:
-                messages.warning(self.request, "Login failed, please try again")
-                return JsonResponse({}, status = 400)
-      
-class AddCandidates(generic.View):
-    template_name = 'votingContract/addCandidates.html'
-
-    def get(self, *args, **kwargs):
-        return render(self.request, self.template_name, {})
-
     def post(self, *args, **kwargs):
         if self.request.is_ajax and self.request.method == "POST":
-            
-            candidate_name1 = str(self.request.POST.get("candidate_name1", None))
-            candidate_name2 = str(self.request.POST.get("candidate_name2", None))
-            candidate_name3 = str(self.request.POST.get("candidate_name3", None))
 
-            candidates = [candidate_name1,candidate_name2,candidate_name3]
-            for x in candidates:
-                if len(x):
-                    transaction = votingsystem.functions.generate_canditate_list(x).buildTransaction(
-                        {
-                            'gas': 100000,
-                            'gasPrice': w3.toWei('1', 'gwei'),
-                            'nonce': w3.eth.getTransactionCount(self.request.session['account_address'])
-                        }
-                    )
-                    pk = self.request.session['account_private_key']
-                    run_transaction(transaction,pk) 
-            return JsonResponse({"status":True}, status = 200, )
-        return JsonResponse({}, status = 400)
+            voted_option = int(self.request.POST.get("candidate", None))
+          
+            publicK = str(self.request.session['account_address'])
+            transaction = votingsystem.functions.vote_for_candidate(publicK,voted_option).buildTransaction({
+                    'gas': 100000,
+                    'gasPrice': w3.toWei('1', 'gwei'),
+                    'nonce': w3.eth.getTransactionCount(publicK)
+             })
 
-
-class RegisterAccountView(generic.View):
-    template_name = 'votingContract/register_account.html'
-
-    def get(self, *args, **kwargs):
-        return render(self.request, self.template_name, {})
-
-    def post(self, *args, **kwargs):
-        if self.request.is_ajax and self.request.method == "POST":
-            voter_address = w3.toChecksumAddress(self.request.POST.get("voter_address", None))
-            voter_fname = str(self.request.POST.get("voter_fname", None))
-            voter_lname = str(self.request.POST.get("voter_lname", None))
-            voter_age = int(self.request.POST.get("voter_age", None))
-
-            if (len(voter_address)) and (len(voter_fname)) and (len(voter_lname)) and (voter_age>0):
-                transaction = votingsystem.functions.register_voter_account(voter_address,voter_fname,voter_lname, voter_age).buildTransaction(
-                    {
-                    'from': self.request.session['account_address'],
-                    'gas': 3000000,
-                    'gasPrice': w3.toWei('40', 'gwei'),
-                    'nonce': w3.eth.getTransactionCount(self.request.session['account_address'],) 
-                })
-            
-                pk = self.request.session['account_private_key']
-                run_transaction(transaction,pk)  
+            pk = self.request.session['account_private_key']
+            run_transaction(transaction,pk)  
             return JsonResponse({"status":True}, status = 200)
         return JsonResponse({}, status = 400)
 
-
-# class displayAccount(generic.TemplateView):
-#     template_name = 'votingContract/accountList.html'
-
-#     def get(self, *args, **kwargs):
-#         accountAddress = votingsystem.functions.voter_accounts().call()
-#         print(accountAddress)
-        # candidate_names = []
-
-        # for candidate in range(0,candidate_num):
-        #     candidate_names.append(votingsystem.functions.get_candidate_name(candidate).call())
-
-        # context ={
-        #     'candidates':candidate_names
-        # }
-        # return render(self.request,self.template_name)
-        # return JsonResponse({"status":True}, status = 200)
 
 def run_transaction(tx, pk):
     signed_tx = w3.eth.account.signTransaction(tx,pk)
@@ -440,8 +402,4 @@ def clearSession(request):
     except KeyError:
         pass
     messages.info(request, "Sign out completed")
-    return redirect('votingContract:login')
-
-
-
-
+    return redirect('voting:login')
