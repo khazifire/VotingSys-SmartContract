@@ -1,0 +1,19 @@
+<html>
+
+<head>
+  {% load static %}
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" type="text/css" href="{% static 'AIUTS/login.css' %}">
+  <title>Logged Out</title>
+</head>
+
+<body>
+  <div class="main">
+ 
+    <p class="sign">Logged out! <a  class="cta"href="{% url 'login'%}">Click here to login again.</a></p>  
+        
+  </div>  
+</body>
+</html>

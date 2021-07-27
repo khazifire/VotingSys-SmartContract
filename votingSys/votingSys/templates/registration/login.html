@@ -1,0 +1,62 @@
+<html>
+
+<head>
+  {% load static %}
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" type="text/css" href="{% static 'AIUTS/login.css' %}">
+  <title>Sign in</title>
+</head>
+
+<body>
+  <div class="main1">
+    <p class="sign1">AIUTS | Sign in</p>
+    <form class="form1" method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <input class="un " type="text" placeholder="Username" name="username">
+      <input class="pass" type="password"  placeholder="Password" name="password">
+      <input type="hidden" name="next" value="{{ next }}" />
+
+      {% if form.errors %}
+      <p class="loginEr">Your username and password didn't match.<br> Please try again!</p>
+    {% endif %}
+    
+    {% if next %}
+      {% if user.is_authenticated %}
+        <p class="authMsgError">Your account doesn't have access to this page. To proceed,please login with an account that has access.</p>
+      {% else %}
+      <p  class="authMsgError">Thank you for signing up, please login to continue.</p>
+      {% endif %}
+    {% endif %}
+
+     <input class="submit" type="submit" value="login" />
+    
+      <p class="forgot" >Don't have an account? <a class="createA"href="{% url 'AIUTS:addAccount' %}">Create Account</a></p>
+      <p class="forgot" >I'm an Admin <a class="createA"href="{% url 'controller:index' %}">Here</a></p>
+
+    </form>          
+  </div>  
+</body>
+</html>
+
+
+
+
+  
+
+
+<!-- <h1>Welcome to AIUTS</h1>
+<form method="post" action="{% url 'login' %}" class="loginForm">
+{% csrf_token %}
+  <label for="username">Username: </label>
+  <input type="text" name="username"> <br>
+  <label for="password">Password: </label>
+  <input type="password" name="password"><br>
+  <input type="submit" value="login" />
+  <input type="hidden" name="next" value="{{ next }}" />
+</form> -->
+
+
+</body>
+</html>

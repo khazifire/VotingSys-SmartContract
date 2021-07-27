@@ -1,0 +1,57 @@
+{% extends "poll/base.html" %}
+
+{% block maincontent %}
+<!-- Register Account -->
+<form id="register-account-form">
+    {% csrf_token %}
+    <label for="voter_address">Citizen Address:</label><br>
+    <input type="text" id="voter_address" name="voter_address"><br>
+
+    <label for="voter_fname">Citizen First Name:</label><br>
+    <input type="text" id="voter_fname" name="voter_fname"><br>
+
+    <label for="voter_lname">Citizen First Name:</label><br>
+    <input type="text" id="voter_lname" name="voter_lname"><br>
+
+    <label for="voter_age">Citizen Age:</label><br>
+    <input type="number" id="voter_age" name="voter_age"><br>
+
+    <input type="submit" class="btn btn-primary" value="Register" />
+</form>
+{% endblock maincontent %}	
+
+{% block javascript %}
+<script>
+
+    $("#register-account-form").submit(function (e) {
+
+        e.preventDefault();
+
+        var serializedData = $(this).serialize();
+  
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'poll:create' %}",
+            data: serializedData,
+            success: function (response) {
+
+                console.log(response);
+                var status = JSON.parse(response["status"]);
+                console.log(status)
+                $("#feedback").append(`Registering student account 
+                    ${$("input[name=voter_lname]").val()} @ 
+                    ${$("input[name=voter_age]").val()}: ${status}<br>`);
+                // 2. clear the form
+                $("#voter_lname").val('');
+                $("#voter_age").val('');
+                // 3. focus to  
+                $("#voter_age").focus();
+            },
+            error: function (response) {
+                // log error if any
+                $("#feedback").append(`ERROR!: ${response["responseJSON"]["error"]}<br>`);
+            }
+        });
+    });
+</script>
+{% endblock javascript %}

@@ -1,0 +1,35 @@
+{% extends "votingContract/base.html" %}
+
+{% block maincontent %}
+<!-- Register Account -->
+<form id="register-account-form">
+    {% csrf_token %}
+    <label for="public_key">Username:</label><br>
+    <input type="text" id="public_key" name="public_key"><br>
+
+    <label for="private_key">Password:</label><br>
+    <input type="password" id="private_key" name="private_key"><br>
+
+    <button type="submit" class="btn btn-primary">set Default</button>
+</form>
+
+<script>
+    $("#register-account-form").submit(function (e) {
+        e.preventDefault();
+        var serializedData = $(this).serialize();
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'votingContract:login' %}",
+            data: serializedData,
+            success: function (response) {
+                console.log(response)
+                window.location.href = "{% url 'votingContract:dashboard' %}"
+            },
+            error: function (response) {
+                // log error if any
+                $("#feedback").append(`ERROR!: ${response["responseJSON"]["error"]}<br>`);
+            }
+        });
+    });
+</script>
+{% endblock maincontent %}

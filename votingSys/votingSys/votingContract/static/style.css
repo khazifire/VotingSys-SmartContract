@@ -1,0 +1,67 @@
+/* style.css */
+
+body{
+    font-size: 16px;
+}
+
+.navbar-default, .btn, .form-control, .panel {
+    border-radius: 0;
+}
+.navbar-default {
+    background-color: rgb(34, 40, 49);
+    border-color: rgb(57, 62, 70);
+    box-shadow: 0px 3px 3px 0px #ddd;
+}
+.navbar-default .navbar-nav>.active>a, 
+.navbar-default .navbar-nav>.active>a:focus {
+    background-color: rgba(245, 245, 220, .9);
+    border-bottom: 4px solid #ddd;
+}
+.panel-default > .panel-heading {
+    color: white;
+    background-color: rgb(34, 40, 49);
+    border-color: rgb(57, 62, 70);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0; 
+}
+.panel-footer {
+    background-color: EEEEEE;
+    border-color: EEEEEE;
+}
+.panel {
+    box-shadow: 0px 3px 3px 0px #ddd;
+}
+a.navbar-brand, .panel-title {
+    font-weight: bolder;
+}
+
+.panel-title{
+    font-size: 20px;
+}
+
+.btn-group-xs>.btn, .btn-xs {
+    padding: 3px 10px;
+}
+
+.list-group-item {
+    padding: 15px 10px;
+}
+
+.panel-heading {
+    padding: 15px 10px;
+    text-align: center;
+}
+
+.btn-info {
+    background-color:rgb(0, 173, 181);
+}
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-nav>li>a
+{
+    color: white;
+}
+
+.navbar-default .navbar-nav>.active>a:hover{
+    color: red;
+}

@@ -1,0 +1,24 @@
+<!-- home.html -->
+{% extends "votingContract/base.html" %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block maincontent %}
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Candidate List</h3>
+            </div>
+            
+            <ol class="list-group" start="0">
+                {% for candidate in candidates%}
+                <li class="list-group-item"><strong>{{ candidate}}</strong></li>
+                {% endfor%}
+            </ol>
+            
+         
+        </div>
+    </div>
+</div>
+{% endblock %}
