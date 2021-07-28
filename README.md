@@ -1,4 +1,4 @@
-AIUCoins Smart Contract
+Voting System Smart Contract
 
 ## Requirement
 
