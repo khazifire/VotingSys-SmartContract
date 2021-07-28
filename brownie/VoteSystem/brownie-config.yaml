@@ -1,0 +1,14 @@
+compiler:
+  vyper:
+    version: '0.2.12'
+
+networks:
+  default: development
+  development:
+    host: 'http://127.0.0.1'
+    cmd_settings:
+      port: 7545
+      network: 5777
+
+wallets: 
+  from_key: ${PRIVATE_KEY}

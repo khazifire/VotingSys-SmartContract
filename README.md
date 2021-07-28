@@ -1,10 +1,16 @@
-Voting System Smart Contract
+# Voting System Smart Contract
 
-## Requirement
+Is a ethereum based contract that is developed to allows users to vote in an efficient and transparent manner. It allows officers(owner) to create a list of candiates for terh voting, as well as registering voters to the system.
 
-This repository needs two main library, i already installed them in a virtual environemnt (web3-venv). But if its not installed, then you can maually add them
+## Tools use:
 
-```bash
-pip install web3
-pip install vyper
-```
+- Django
+- JQuery
+- Bootstrap
+- Ganache
+- Brownie Framework
+
+
+## User Interface
+- Graphic User Interface(Django wep app)
+- Terminal User Interface (python console)
