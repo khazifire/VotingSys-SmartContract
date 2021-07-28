@@ -37,9 +37,9 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a >Home</a></li>
-                        <li><a >Create</a></li>
-                    </ul>
+                        <li><a href="{% url 'votingContract:dashboard' %}">Home</a></li>
+                        <li><a href="{% url 'votingContract:registerAccount' %}">Register</a></li>
+                        <li style="margin-left: 600px"><a href="{% url 'votingContract:login' %}">Logout</a></li>
                 </div><!-- /.navbar-collapse -->
             </div>
         </nav>

@@ -2,20 +2,34 @@
 
 {% block maincontent %}
 <!-- Register Account -->
-<form id="register-account-form">
-    {% csrf_token %}
-    <label for="candidate_name1">candidate name 1:</label><br>
-    <input type="text" id="candidate_name1" name="candidate_name1"><br>
 
-    <label for="candidate_name2">candidate name 2:</label><br>
-    <input type="text" id="candidate_name2" name="candidate_name2"><br>
+<div id="card-add">
+    <div id="card-content">
+      <div id="card-title">
+        <h2>Add Candidates</h2>
+        <div class="underline-title"></div>
+      </div>
+      <form id="register-account-form">
+        {% csrf_token %}
+        <label id="username" for="candidate_name1">Candidate Name 1:</label>
+        <input class="form-content" type="text" id="candidate_name1" name="candidate_name1"><br>
+        <div class="form-border"></div>
+        <br>
+        <label id="username" for="candidate_name2">Candidate Name 2:</label>
+        <input class="form-content" type="text" id="candidate_name2" name="candidate_name2"><br>
+        <div class="form-border"></div>
+        <br>
+        <label id="username" for="candidate_name3">Candidate Name 3:</label>
+        <input class="form-content" type="text" id="candidate_name3" name="candidate_name3"><br>
+        <div class="form-border"></div>
+    
+        <div style="text-align: center;">
+            <button id="submit-btn" type="submit">Submit</button>
+        </div>
+    </form>
+    </div>
+  </div>
 
-    <label for="candidate_name3">candidate name 3:</label><br>
-    <input type="text" id="candidate_name3" name="candidate_name3"><br>
-
-
-    <button type="submit" class="btn btn-primary">Add</button>
-</form>
 
 <script>
 

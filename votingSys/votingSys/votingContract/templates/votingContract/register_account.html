@@ -2,22 +2,40 @@
 
 {% block maincontent %}
 <!-- Register Account -->
-<form id="register-account-form">
-    {% csrf_token %}
-    <label for="voter_address">Citizen Address:</label><br>
-    <input type="text" id="voter_address" name="voter_address"><br>
+<div id="card-register">
+    <div id="card-content">
+      <div id="card-title">
+        <h2>Register Account</h2>
+        <div class="underline-title"></div>
+      </div>
+      <form id="register-account-form">
+        {% csrf_token %}
+        <label id="username" for="voter_address">Citizen Address:</label><br>
+        <input class="form-content" type="text" id="voter_address" name="voter_address"><br>
+        <div class="form-border"></div>
+        <br>
 
-    <label for="voter_fname">Citizen First Name:</label><br>
-    <input type="text" id="voter_fname" name="voter_fname"><br>
+        <label id="username" for="voter_fname">Citizen First Name:</label><br>
+        <input class="form-content" type="text" id="voter_fname" name="voter_fname"><br>
+        <div class="form-border"></div>
+        <br>
 
-    <label for="voter_lname">Citizen First Name:</label><br>
-    <input type="text" id="voter_lname" name="voter_lname"><br>
+        <label id="username" for="voter_lname">Citizen Last Name:</label><br>
+        <input class="form-content" type="text" id="voter_lname" name="voter_lname"><br>
+        <div class="form-border"></div>
+        <br>
 
-    <label for="voter_age">Citizen Age:</label><br>
-    <input type="number" id="voter_age" name="voter_age"><br>
+        <label id="username" for="voter_age">Citizen Age:</label><br>
+        <input class="form-content" type="number" id="voter_age" name="voter_age"><br>
+        <div class="form-border"></div>
 
-    <button type="submit" class="btn btn-primary">set Default</button>
-</form>
+        <div style="text-align: center;">
+            <button id="submit-btn" type="submit">Submit</button>
+        </div>
+    </form>
+    </div>
+  </div>
+
 {% endblock maincontent %}	
 
 {% block javascript %}

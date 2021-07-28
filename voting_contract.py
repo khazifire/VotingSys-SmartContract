@@ -21,14 +21,13 @@ w3 = Web3(HTTPProvider('http://localhost:7545'))
 votingsystem = w3.eth.contract(bytecode=bytecode, abi=abi)
 
 
-print("abiiiiii")
-print(abi)
-# try:
-#     account_address = Web3.toChecksumAddress(str(input("Account Address to Initiate contract: ")))
-#     tx_hash = votingsystem.constructor().transact({
-#         'from': account_address
-#     })
-#     print("\n","-------creation of contract completed ------","\n")
-# except:
-#     print("\n","-------creation of contract failed----------","\n")
+
+try:
+    account_address = Web3.toChecksumAddress(str(input("Account Address to Initiate contract: ")))
+    tx_hash = votingsystem.constructor().transact({
+        'from': account_address
+    })
+    print("\n","-------creation of contract completed ------","\n")
+except:
+    print("\n","-------creation of contract failed----------","\n")
 
