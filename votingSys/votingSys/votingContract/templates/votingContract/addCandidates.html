@@ -27,7 +27,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "{% url 'votingContract:AddCandidates' %}",
+            url: "{% url 'votingContract:addCandidates' %}",
             data: serializedData,
             success: function (response) {
                 console.log(response)
