@@ -301,9 +301,9 @@ abi = '''[
 '''
 
 
-w3 = Web3(HTTPProvider('http://localhost:7545'))
+w3 = Web3(WebsocketProvider('wss://kovan.infura.io/ws/v3/e36440468b6a43f6bb7da30898a98845'))
 
-contract_address = '0x0af609011749c8E1E65648119bD666D0Db5C89A8'
+contract_address = '0x23482725B92E21910f85eDc8B60ae93ade6600D8'
                
 
 votingsystem = w3.eth.contract(address=contract_address, abi=abi)
